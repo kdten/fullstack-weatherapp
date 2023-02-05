@@ -7,7 +7,6 @@ const MongoStore = require("connect-mongo");
 const connectDB = require("./config/database");
 
 const homeRoutes = require('./routes/home')
-const userRoutes = require('./routes/user')
 // Allows us to use process.end.<variable name> to abstract URI strings and API keys
 require("dotenv").config({ path: "./config/.env" });
 
@@ -41,8 +40,6 @@ app.use(
 
 // Routers
 app.use('/', homeRoutes)
-// User functions including city edits and adds
-app.use('/user', userRoutes)
 
 // Server response on port var
 app.listen(process.env.PORT, () => {

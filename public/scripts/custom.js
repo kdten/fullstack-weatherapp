@@ -40,13 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(locdata),
           })
             .then((res) => res.json())
-            .then((owData) => {
-              console.log(owData);
+            .then((beData) => {
+            console.log(beData);
             });
         });
       }
     });
 
+//document.getElementById("cityName").innerHTML = beData.cityName;
     // Converts unix time to relevent date
     function convertUnixTime(timestamp) {
       const date = new Date(timestamp * 1000);
