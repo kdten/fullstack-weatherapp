@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.geolocation.getCurrentPosition((position) => {
           const long = position.coords.longitude;
           const lat = position.coords.latitude;
-          const data = { long, lat };
+          const locdata = { long, lat };
           fetch("/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
+            body: JSON.stringify(locdata),
           })
             .then((res) => res.json())
             .then((owData) => {

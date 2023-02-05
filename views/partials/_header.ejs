@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
+    <title>Weather Station</title>
+    <link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="fonts/bootstrap-icons.css" />
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="_manifest.json" />
+    <meta id="theme-check" name="theme-color" content="#FFFFFF" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="app/icons/icon-192x192.png"
+    />
+  </head>
+
+  <body class="theme-light">
+    <div id="preloader">
+      <div class="spinner-border color-highlight" role="status"></div>
+      <a href="#" data-bs-toggle="offcanvas" data-bs-target="#menu-information" class="list-group-item">
+        <i class="bi bi-info-circle-fill color-blue-dark font-15"></i>
+        <div>Information</div>
+        <i class="bi bi-chevron-right pe-1"></i>
+      </a>
+    </div>
+
+    <div id="page">
+      <!-- Header -->
+
+  <div class="header-bar header-center header-transparent shadow-m">
+    <!-- <a href="#"><i class="color-red-dark font-14 bi bi-heart-fill"></i></a>
+    <a href="#"><i class="color-blue-dark font-14 bi bi-gear-fill"></i></a> -->
+    <a href="#"></a>
+    <a href="#"></a>
+    <a href="#" class="header-title city-location-input">
+      <form action="/new" method="POST">
+        <label for="textinput"></label>
+        <input type="text" name="city-holder" placeholder="Toronto"/>
+        <button type="submit" class="city-submit-btn"><i class="bi bi-search font-13"></i></button>
+    </form>
+      </a>
+    <a href="#" class="show-on-theme-light" data-toggle-theme><i class="bi bi-moon-fill font-13"></i></a>
+		<a href="#" class="show-on-theme-dark" data-toggle-theme ><i class="bi bi-lightbulb-fill color-yellow-dark font-13"></i></a>
+    <a data-bs-toggle="offcanvas" data-bs-target="#menu-color" href="#"><i class="bi bi-gear-fill font-13 color-highlight"></i></a>
+  </div>
+
+      <!-- Footer Bar/Container-->
+      <div id="footer-bar" class="footer-bar">
+        <!-- <div class = "class="footer-bar "footer-bar-transparent"></class> -->
+        <div class="hourly-bar">
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp font-700">74°</div>
+            <div class="hour-bar-time font-700">8A</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">9A</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">10A</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">11A</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">12P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">1P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">2P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">3P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">4P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">5P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">6P</div>
+          </div>
+
+          <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp">74°</div>
+            <div class="hour-bar-time">7P</div>
+          </div>
+
+          
+
+          
+        </div>
+        <hr class="hourly-divider"/>
+        <div class="daily-bar">
+          <div class="day-element">
+            <img
+              class="day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="font-700">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="dateBold">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="dateBold">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="dateBold">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="dateBold">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="dateBold">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="dateBold">Mon</span> Jan 22</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+
+          <div class="day-element">
+            <img
+              class="bi bi-image day-bar-icon-sm"
+              src="icons/01d.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><strong>Mon</strong> Jan 24</div>
+            <div class="low-temp">74°</div>
+            <div class="high-temp">85°</div>
+          </div>
+        </div>
+      </div>

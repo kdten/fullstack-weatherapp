@@ -14,7 +14,7 @@ require("dotenv").config({ path: "./config/.env" });
 // Connect to DB
 connectDB();
 
-// Middleware
+// Middleware 
 // Set view engine to use ejs
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -25,7 +25,6 @@ app.use(express.json());
 app.use(
   session({
     genid: (req) => {
-      console.log("1. in genid req.sessionID: ", req.sessionID);
       return uuidv4();
     },
     // Store it into mongoDB
@@ -33,9 +32,13 @@ app.use(
     collectionName: "sessions",
     secret: process.env.SECRETKEY,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
   })
-);
+  );
+  
+//console.log("1. in genid req.sessionID: ", req.sessionID);
+
 // Routers
 app.use('/', homeRoutes)
 // User functions including city edits and adds
