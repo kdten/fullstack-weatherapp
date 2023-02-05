@@ -1,0 +1,37 @@
+<%- include("_header.ejs") -%>
+
+      <!-- Main Sidebar-->
+      <div
+        id="menu-main"
+        data-menu-active="nav-comps"
+        data-menu-load="menu-main.html"
+        style="width: 280px"
+        class="offcanvas offcanvas-start offcanvas-detached rounded-m"
+      ></div>
+      <!-- Menu Highlights-->
+      <div
+        id="menu-color"
+        data-menu-load="menu-highlights.html"
+        style="height: 340px"
+        class="offcanvas offcanvas-bottom offcanvas-detached rounded-m"
+      ></div>
+
+      <!-- Your Page Content Goes Here-->
+      <div class="page-content header-clear-small">
+        
+        <div data-card-height="600" class="card card-style bg-18 rounded-l shadow-l">
+          <div class="card-overlay bg-gradient-fade">
+        <!-- Weather slider inside background card -->
+       
+            <!-- Carousel start --------------------------- -->
+        <div id="carouselExampleNoRide" class="carousel slide is-static" data-bs-interval="false">
+        <p><%= owData %></p>
+
+
+
+
+
+      </div>
+		</div>
+    <%- include("_footer.ejs") -%>
+
