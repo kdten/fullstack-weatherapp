@@ -14,8 +14,6 @@ require("dotenv").config({ path: "./config/.env" });
 connectDB();
 
 // Middleware 
-// Set view engine to use ejs
-app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

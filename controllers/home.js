@@ -4,7 +4,6 @@ require("dotenv").config({ path: "./config/.env" });
 
 module.exports = {
   getIndex: (req, res) => {
-    res.render("index.ejs");
     console.log(`sessionID from getIndex: ${req.sessionID}`);
     req.session.user = req.sessionID;
   },
@@ -45,7 +44,6 @@ module.exports = {
         //daily: owApiRes.data.daily,
       };
       console.log(owData.cityName);
-      res.render("index", { beData: owData.cityName });
     // // Find a User document that matches the session ID stored in the sessions collection
     // User.findOne({ userId: req.sessionID }, (err, user) => {
     //   // If there was an error finding the user or saving the new User document, return a 500 status code and an error message
