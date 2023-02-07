@@ -25,8 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //Place all your custom Javascript functions and plugin calls below this line
   function init_template() {
-
-
     // This code uses 'navigator.geolocation' to get the client's current position and the 'window.addEventListener' to run the code when the page loads. It then sends a POST request to an endpoint '/' with the longitude and latitude as JSON data.
     window.addEventListener("load", () => {
       if (navigator.geolocation) {
@@ -34,85 +32,105 @@ document.addEventListener("DOMContentLoaded", () => {
           const long = position.coords.longitude;
           const lat = position.coords.latitude;
           const locdata = { long, lat };
-          fetch("/", {
+          fetch("/weather", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(locdata),
           })
             .then((res) => res.json())
             .then((data) => {
-            console.log(data);
+              console.log(data);
+              // DAILY AJAX-------------------------
+              const daySc = document.querySelector(".daily-bar");
+              // First date here so day says "Today" with todays info
+              daySc.innerHTML += `<div class="day-element">
+                <img
+                  class="day-bar-icon-sm"
+                  src="icons/${data.daily[0].weather[0].icon}.png"
+                  alt=""
+                  srcset=""
+                  id="weather-icon"
+                />
+                <div class="date"><span class="font-700">Today</span></div>
+                <div class="low-temp">${data.daily[0].temp.min.toFixed(
+                  0
+                )}°</div>
+                <div class="high-temp">${data.daily[0].temp.max.toFixed(
+                  0
+                )}°</div>
+              </div>`;
+
+              for (let i = 1; i < 9; i++) {
+                // Set up date for unix calculation and display
+                const date = new Date(data.daily[i].dt * 1000);
+                const month = date.toLocaleString("default", {
+                  month: "short",
+                });
+                const day = date.toLocaleString("default", { day: "numeric" });
+                const weekday = date.toLocaleString("default", {
+                  weekday: "short",
+                });
+                const formattedDate = `${month} ${day}`;
+                // Iterate through rest of daily(s)
+                daySc.innerHTML += `<div class="day-element">
+                <img
+                  class="day-bar-icon-sm"
+                  src="icons/${data.daily[i].weather[0].icon}.png"
+                  alt=""
+                  srcset=""
+                  id="weather-icon"
+                />
+                <div class="date"><span class="font-700">${weekday}</span> ${formattedDate}</div>
+                <div class="low-temp">${data.daily[i].temp.min.toFixed(
+                  0
+                )}°</div>
+                <div class="high-temp">${data.daily[i].temp.max.toFixed(
+                  0
+                )}°</div>
+              </div>`;
+              }
+
+              // HOURLY AJAX-------------------------
+              const hourSc = document.querySelector(".hourly-bar");
+              // First date here so day says "Today" with todays info
+
+              hourSc.innerHTML += `<div class="hour-element">
+              <img
+                class="hour-bar-icon-sm"
+                src="icons/${data.hourly[0].weather[0].icon}.png"
+                alt=""
+                srcset=""
+                id="weather-icon"
+              />
+              <div class="hour-bar-temp font-700">${data.curTemp}°</div>
+              <div class="hour-bar-time font-700">NOW</div>
+            </div>`;
+
+              // for (let i = 1; i < 25; i++) {
+              //   // Set up hour for unix calculation and display
+              //   const date = new Date(data.hourly[i].dt * 1000);
+              //   const hour = date.getHours();
+              //   const ampm = hour < 12 ? "A" : "P";
+              //   const formattedTime = `${hour % 12 || 12}${ampm}`;
+              //   // Iterate through rest of daily(s)
+              //   daySc.innerHTML += `<div class="hour-element">
+              //   <img
+              //     class="hour-bar-icon-sm"
+              //     src="${data.hourly[i].weather[0].icon}.png"
+              //     alt=""
+              //     srcset=""
+              //     id="weather-icon"
+              //   />
+              //   <div class="hour-bar-temp font-700">${data.curTemp}°</div>
+              //   <div class="hour-bar-time font-700">${formattedTime}</div>
+              // </div>`;
+              // }
             });
         });
       }
     });
-                
-//document.getElementById("cityName").innerHTML = beData.cityName;
-    // Converts unix time to relevent date
-    function convertUnixTime(timestamp) {
-      const date = new Date(timestamp * 1000);
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-      const dayOfWeek = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ][date.getDay()];
 
-      return `${dayOfWeek}, ${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
-
-    // Function converts wind degrees to direction
-    function windDirection(degree) {
-        const directions = [
-          "N",
-          "NNE",
-          "NE",
-          "ENE",
-          "E",
-          "ESE",
-          "SE",
-          "SSE",
-          "S",
-          "SSW",
-          "SW",
-          "WSW",
-          "W",
-          "WNW",
-          "NW",
-          "NNW"
-        ];
-        let index = Math.round(degree / 22.5) % 16;
-        return directions[index];
-      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //document.getElementById("cityName").innerHTML = beData.cityName;
 
     //Caching Global Variables
     var i, e, el, evt, event; //https://www.w3schools.com/js/js_performance.asp

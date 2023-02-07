@@ -7,6 +7,7 @@ const MongoStore = require("connect-mongo");
 const connectDB = require("./config/database");
 
 const homeRoutes = require('./routes/home')
+const weatherRoutes = require('./routes/weather')
 // Allows us to use process.end.<variable name> to abstract URI strings and API keys
 require("dotenv").config({ path: "./config/.env" });
 
@@ -33,11 +34,11 @@ app.use(
     cookie: { secure: false }
   })
   );
-  
-//console.log("1. in genid req.sessionID: ", req.sessionID);
+
 
 // Routers
 app.use('/', homeRoutes)
+app.use('/weather', weatherRoutes)
 
 // Server response on port var
 app.listen(process.env.PORT, () => {
