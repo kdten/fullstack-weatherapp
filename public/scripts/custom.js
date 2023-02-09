@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //Place all your custom Javascript functions and plugin calls below this line
   function init_template() {
     // This code uses 'navigator.geolocation' to get the client's current position and the 'window.addEventListener' to run the code when the page loads. It then sends a POST request to an endpoint '/' with the longitude and latitude as JSON data.
+    
     window.addEventListener("load", () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -39,11 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
           })
             .then((res) => res.json())
             .then((data) => {
-              console.log(data);
-              // DAILY AJAX-------------------------
-              const daySc = document.querySelector(".daily-bar");
+              // CITYNAME AJAX=============================================
+              const cityNameSel = document.querySelector(".city-name");
+              cityNameSel.textContent += `${data.cityName}`;
+
+              // DAILY AJAX=============================================
+              const dayBar = document.querySelector(".daily-bar");
               // First date here so day says "Today" with todays info
-              daySc.innerHTML += `<div class="day-element">
+              dayBar.innerHTML += 
+                `<div class="day-element">
                 <img
                   class="day-bar-icon-sm"
                   src="icons/${data.daily[0].weather[0].icon}.png"
@@ -52,27 +57,19 @@ document.addEventListener("DOMContentLoaded", () => {
                   id="weather-icon"
                 />
                 <div class="date"><span class="font-700">Today</span></div>
-                <div class="low-temp">${data.daily[0].temp.min.toFixed(
-                  0
-                )}°</div>
-                <div class="high-temp">${data.daily[0].temp.max.toFixed(
-                  0
-                )}°</div>
+                <div class="low-temp">${data.daily[0].temp.min.toFixed(0)}°</div>
+                <div class="high-temp">${data.daily[0].temp.max.toFixed(0)}°</div>
               </div>`;
-
-              for (let i = 1; i < 9; i++) {
+              
+              for (let i = 1; i < 8; i++) {
                 // Set up date for unix calculation and display
                 const date = new Date(data.daily[i].dt * 1000);
-                const month = date.toLocaleString("default", {
-                  month: "short",
-                });
+                const month = date.toLocaleString("default", { month: "short" });
                 const day = date.toLocaleString("default", { day: "numeric" });
-                const weekday = date.toLocaleString("default", {
-                  weekday: "short",
-                });
+                const weekday = date.toLocaleString("default", { weekday: "short" });
                 const formattedDate = `${month} ${day}`;
                 // Iterate through rest of daily(s)
-                daySc.innerHTML += `<div class="day-element">
+                dayBar.innerHTML += `<div class="day-element">
                 <img
                   class="day-bar-icon-sm"
                   src="icons/${data.daily[i].weather[0].icon}.png"
@@ -81,20 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
                   id="weather-icon"
                 />
                 <div class="date"><span class="font-700">${weekday}</span> ${formattedDate}</div>
-                <div class="low-temp">${data.daily[i].temp.min.toFixed(
-                  0
-                )}°</div>
-                <div class="high-temp">${data.daily[i].temp.max.toFixed(
-                  0
-                )}°</div>
-              </div>`;
+                <div class="low-temp">${data.daily[i].temp.min.toFixed(0)}°</div>
+                <div class="high-temp">${data.daily[i].temp.max.toFixed(0)}°</div>
+                </div>`
               }
-
-              // HOURLY AJAX-------------------------
-              const hourSc = document.querySelector(".hourly-bar");
-              // First date here so day says "Today" with todays info
-
-              hourSc.innerHTML += `<div class="hour-element">
+              
+              // HOURLY AJAX=============================================
+              const hourlyBar = document.querySelector('.hourly-bar');
+              // First hour here so hour says "Now"
+              hourlyBar.innerHTML += `<div class="hour-element">
               <img
                 class="hour-bar-icon-sm"
                 src="icons/${data.hourly[0].weather[0].icon}.png"
@@ -104,33 +96,102 @@ document.addEventListener("DOMContentLoaded", () => {
               />
               <div class="hour-bar-temp font-700">${data.curTemp}°</div>
               <div class="hour-bar-time font-700">NOW</div>
-            </div>`;
+            </div>`
+              
+                for (let i = 1; i < 24; i++) {
+                // Set up hour for unix calculation and display
+                const hourDate = new Date(data.hourly[i].dt * 1000);
+                const hours = hourDate.getHours();
+                let timeOfDay = "A";
+                if (hours >= 12) {
+                timeOfDay = "P";
+                }
+                const formattedTime = (hours % 12 || 12) + timeOfDay.charAt(0);
+                // Iterate through rest of daily(s)
+                hourlyBar.innerHTML += `<div class="hour-element">
+                <img
+                  class="hour-bar-icon-sm"
+                  src="icons/${data.hourly[i].weather[0].icon}.png"
+                  alt=""
+                  srcset=""
+                  id="weather-icon"
+                />
+                <div class="hour-bar-temp font-700">${data.hourly[i].temp.toFixed(0)}°</div>
+                <div class="hour-bar-time font-700">${formattedTime}</div>
+              </div>`;
+              }
 
-              // for (let i = 1; i < 25; i++) {
-              //   // Set up hour for unix calculation and display
-              //   const date = new Date(data.hourly[i].dt * 1000);
-              //   const hour = date.getHours();
-              //   const ampm = hour < 12 ? "A" : "P";
-              //   const formattedTime = `${hour % 12 || 12}${ampm}`;
-              //   // Iterate through rest of daily(s)
-              //   daySc.innerHTML += `<div class="hour-element">
-              //   <img
-              //     class="hour-bar-icon-sm"
-              //     src="${data.hourly[i].weather[0].icon}.png"
-              //     alt=""
-              //     srcset=""
-              //     id="weather-icon"
-              //   />
-              //   <div class="hour-bar-temp font-700">${data.curTemp}°</div>
-              //   <div class="hour-bar-time font-700">${formattedTime}</div>
-              // </div>`;
-              // }
+              // MAIN/CENTER AJAX=============================================
+              const mainWeather = document.querySelector(".cardone");
+              mainWeather.innerHTML += 
+              `<div class="main-weather">
+
+              <div class="main-temp-and-feelslike">
+
+                <span class="main-temp font-50">${data.curTemp}°</span>
+                <span class="font-8 feelslike-text">
+                  <span class="feels-text">feels</span>
+                  <span class="like-text font-10">&nbsp;like</span>
+                </span>
+                <span class="feels-like-temp font-34">${data.feelsTemp}°</span>
+              </div>
+
+              <div class="main-center-section">
+
+                <div class="left-main">
+                  <h5>L ${data.loTemp}°</h5>
+                  <hr class="main-divider"/>
+                  <div class="wind-container">
+                    <img src="images/wind-icons-light/${data.windDir}.png" class="wind-image"></img>
+                    <span class="font-12 wind-text">
+                      <span class="wind-num-text">${data.windSpeed}</span>
+                      <span class="mph-text">mph</span>
+                    </span>
+                  </div>
+                  <i class="bi bi-sunrise font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;${data.sunriseTime}<span class="rise-dif"></span></i>
+                  <i class="bi bi-sunset font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;${data.sunsetTime}<span class="set-dif"></span></span></i>
+                  
+                </div>
+
+                <div class="center-main">
+                  <img
+                    src="hd-icons/${data.hdIcon}.png"
+                    alt=""
+                    srcset=""
+                    id="main-weather-icon"
+                  />
+                  <h5 class="'main-weather-desc">${data.curDesc}</h5>
+                </div>
+
+                <div class="right-main">
+                  <h5>H ${data.hiTemp}°</h5>
+                  <hr class="main-divider"/>
+                  <i class="bi bi-umbrella font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;&nbsp;${data.chanceRain}%</span></i>
+                  <i class="bi bi-moisture font-18 color-theme"><span class="humidity-icon"><span class="humidity-text font-14"> &nbsp;&nbsp;&nbsp;${data.curHum}%</span></i>
+                  <i class="bi bi-speedometer font-18 color-theme"><span class="humidity-icon"><span class="humidity-text font-14"> &nbsp;&nbsp;&nbsp;${data.aqi}/4</span></i>
+                  
+                </div>
+                </div>
+              </div>`
+
+
+
+
+
+
+
+
+
+
+
+              // hourlyBar.innerHTML += hourElement;
             });
         });
       }
     });
 
-    //document.getElementById("cityName").innerHTML = beData.cityName;
+
+
 
     //Caching Global Variables
     var i, e, el, evt, event; //https://www.w3schools.com/js/js_performance.asp

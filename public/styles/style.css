@@ -1613,7 +1613,7 @@ p {
   display: grid;
   overflow-x: auto;
   grid-gap: 10px;
-  grid-template-columns: repeat(8, 115px);
+  grid-template-columns: 90px repeat(7, 105px);
   grid-template-rows: minmax(1, 40px);
 
   height: 45px;
@@ -1625,7 +1625,7 @@ p {
 .day-element {
   padding: 0;
   display: grid;
-  gap: 0px;;
+  gap: 0px;
   grid-template-columns: 36px 29px auto;
   grid-template-rows: repeat(2, 20px);
 
@@ -1644,6 +1644,7 @@ p {
   grid-row: 1 / 2;
   text-align: start;
   font-weight: 300;
+  white-space: nowrap;
 }
 
 .low-temp {
@@ -1795,6 +1796,13 @@ input:focus {
   font-style: normal;
 }
 
+.cardone {
+
+}
+
+.addcity {
+  
+}
 
 /*Chat Bubbles - Duo 3.2*/
 .speach-icon a {

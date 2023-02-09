@@ -88,13 +88,7 @@ module.exports = {
         let tempTime = time.replace(/(^0(?:0:0?)?)/, '').trim();
         return tempTime.replace(/(AM|PM)/, '').trim();
       }
-      // // Function converts UNIX to locale time; hourly bar
-      // function unixTo12hr(unixTimestamp) {
-      //   const date = new Date(unixTimestamp * 1000);
-      //   const time = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      //   let tempTime = time.replace(/(^0(?:0:0?)?)/, '').trim();
-      //   return tempTime.replace(/(AM|PM)/, '').trim();
-      // }
+     
       // Weather desc all lower to Capitalized
       function descCase(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
@@ -109,7 +103,7 @@ module.exports = {
         aqi: aqApiRes.data.list[0].main.aqi,
         // From openweather
         // Hourly
-        hourly: owApiRes.data.hourly.slice(0, 24),
+        hourly: owApiRes.data.hourly.slice(0, 25),
         // Daily
         daily: owApiRes.data.daily,
         
