@@ -22,6 +22,7 @@ module.exports = {
       // Set curCityName equal to city name
       const geoData = {
         curCityName: geoApiRes.data[0].name,
+        curStateName: geoApiRes.data[0].state,
       };
 
       // Send the received data to air quality API
@@ -99,11 +100,12 @@ module.exports = {
       const owData = {
         // From geocoding API
         cityName: geoData.curCityName,
+        stateName: geoData.curStateName,
         // From air quality API
         aqi: aqApiRes.data.list[0].main.aqi,
         // From openweather
         // Hourly
-        hourly: owApiRes.data.hourly.slice(0, 25),
+        hourly: owApiRes.data.hourly.slice(0, 30),
         // Daily
         daily: owApiRes.data.daily,
         
@@ -122,7 +124,7 @@ module.exports = {
         curDesc: descCase(owApiRes.data.current.weather[0].description),
         hdIcon: owApiRes.data.current.weather[0].icon,
       };
-      //console.log(owData)
+      
       // // Find a User document that matches the session ID stored in the sessions collection
       // User.findOne({ userId: req.sessionID }, (err, user) => {
       //   // If there was an error finding the user or saving the new User document, return a 500 status code and an error message
