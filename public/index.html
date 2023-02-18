@@ -40,15 +40,13 @@
     </div>
 
     <div id="page">
-      <!-- Header -->
-
-  <div class="header-bar header-center header-transparent shadow-m">
-    <!-- <a href="#"><i class="color-red-dark font-14 bi bi-heart-fill"></i></a>
-    <a href="#"><i class="color-blue-dark font-14 bi bi-gear-fill"></i></a> -->
+      
+    <!-- Header -->
+    <div class="header-bar header-center header-transparent shadow-m">
     <a href="#"></a>
     <a href="#"></a>
     <a href="#" class="header-title city-location-input">
-      <span class="city-name"></span>
+      <span class="city-name">Fetching location data</span>
         <button type="submit" class="city-submit-btn"><i class="bi bi-search font-13"></i></button>
       </a>
     <a href="#" class="show-on-theme-light" data-toggle-theme><i class="bi bi-moon-fill font-13"></i></a>
@@ -56,20 +54,23 @@
     <a data-bs-toggle="offcanvas" data-bs-target="#menu-color" href="#"><i class="bi bi-gear-fill font-13 color-highlight"></i></a>
   </div>
 
-  
-  <!-- This is the code for when the weather is being sidplayed (not city add)
-    
-    <div class="header-bar header-center header-transparent shadow-m">
+
+<!-- Header that is done and working for weather display, will make one above form for searching-->
+    <!-- <div class="header-bar header-center header-transparent shadow-m">
     <a href="#"></a>
     <a href="#"></a>
     <a href="#" class="header-title city-location-input">
-      <span class="city-name"></span>
+      <span class="city-name">Fetching location data</span>
         <button type="submit" class="city-submit-btn"><i class="bi bi-search font-13"></i></button>
       </a>
     <a href="#" class="show-on-theme-light" data-toggle-theme><i class="bi bi-moon-fill font-13"></i></a>
 		<a href="#" class="show-on-theme-dark" data-toggle-theme ><i class="bi bi-lightbulb-fill color-yellow-dark font-13"></i></a>
     <a data-bs-toggle="offcanvas" data-bs-target="#menu-color" href="#"><i class="bi bi-gear-fill font-13 color-highlight"></i></a>
   </div> -->
+
+
+
+
 
       <!-- Footer Bar/Container-->
       <div id="footer-bar" class="footer-bar">
@@ -100,7 +101,7 @@
       <!-- Your Page Content Goes Here-->
       <div class="page-content header-clear-small">
         
-        <div data-card-height="600" class="card card-style bg-18 rounded-l shadow-l">
+        <div data-card-height="550" class="card card-style bg-18 rounded-l shadow-l">
           <div class="card-overlay bg-gradient-fade">
         <!-- Weather slider inside background card -->
        
@@ -115,10 +116,10 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
             <div
-                  data-card-height="600"
+                  data-card-height="550"
                   class="card rounded-m shadow-l"
                 >
-                <div class="card-center cardone text-center m-3">
+                <div class="card-center text-center m-3">
                   <!-- <div class="main-weather">
 
                     <div class="main-temp-and-feelslike">
@@ -175,11 +176,34 @@
             </div>
             <div class="carousel-item">
               <div
-                    data-card-height="600"
+                    data-card-height="550"
                     class="card rounded-m shadow-l"
                   >
                   <div class="card-center addcity text-center m-3">
-                    <p class="addcitytextcard">Type in your city above</p>
+                    <div class="card card-style">
+                      <div class="content">
+                        <h4>List of locations</h4>
+                        <div class="list-group list-custom list-group-m rounded-xs">
+
+                          <a href="#" class="list-group-item">
+                            <div>City 1</div>
+                            <i class="bi bi-x-circle-fill color-red-light font-15"></i>
+                          </a>
+
+                          <a href="#" class="list-group-item">
+                            <div>City 2</div>
+                            <i class="bi bi-x-circle-fill color-red-light font-15"></i>
+                          </a>
+                          
+                          <a href="#" class="list-group-item">
+                            <div>City 3</div>
+                            <i class="bi bi-x-circle-fill color-red-light font-15"></i>
+                          </a>
+                            </div>
+
+                        </div>
+                      </div>
+                    </div>
                     </div>
                     <div
                       class="card-overlay rounded-m bg-gradient-fade opacity-90"
