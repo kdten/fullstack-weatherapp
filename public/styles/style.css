@@ -1687,6 +1687,10 @@ p {
 .city-submit-btn {
   outline:none;
   border: 0;
+  position: absolute;
+  right: 0px;
+  top: 0;
+
 }
 
 
@@ -1697,7 +1701,7 @@ p {
 
 .autocomplete-container input{
   background-color:transparent;
-  width: 260px;
+  width: 150px;
   height: 30px;
   outline: none;
   
@@ -1727,6 +1731,36 @@ p {
   /*when hovering an item:*/
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+
+/* Clear button for autocomplete */
+.clear-button {
+  cursor: pointer;
+  
+  position: absolute;
+  right: 20px;
+  top: 0;
+
+  height: 100%;
+  display: none;
+  align-items: center;
+}
+
+
+.clear-button.visible {
+  display: flex;
+}
+
+.clear-button:hover {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.autocomplete-items .autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+
 
 /* Main center top temperatures, sits on on top of 3 columns */
 .main-temp {
