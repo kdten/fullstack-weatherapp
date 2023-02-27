@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let slideCityAdd = {};
     let arrOfSlides = [];
     let slide0weather;
+    // Global var gets set to current selected city data object
+    let currentSelCityFromInput;
     window.addEventListener("load", () => {
       getSlide0Weather();
     });
@@ -48,6 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
           const data = await response.json();
           slide0weather = data;
           arrOfSlides.push(slide0weather);
+
+          let currentLocation = {
+            cityName: data.cityName,
+            lat: lat,
+            lon: long
+          };
+          updateCurrentCity(currentLocation)
           arrOfSlides.push(slideCityAdd);
           changeHeaderInfoToActiveSlide();
           changeFooterInfoToActiveSlide();
@@ -55,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+    
 
     function getCurrentSlideIndex() {
       // Get all the carousel items
@@ -70,15 +80,65 @@ document.addEventListener("DOMContentLoaded", () => {
       return -1;
     }
 
+    // PUT for current city, replaces 0 index in db
+    function updateCurrentCity(city) {
+      fetch('/weather/current', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          cityName: city
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log('User document updated with current selected city');
+        // Add any additional desired code logic here
+      })
+      .catch(error => {
+        console.error('There was a problem with the PUT request:', error);
+      });
+    }
+
+
+    // PUT for adding city to user document in db
+    function updateUserCity(city) {
+      fetch('/weather', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          cityName: city
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log('User document updated with current selected city');
+        // Add any additional desired code logic here
+      })
+      .catch(error => {
+        console.error('There was a problem with the PUT request:', error);
+      });
+    }
+    
+
+
+
     // Get the carousel element
     const carouselElement = document.querySelector(".carousel");
-
     // Event listener for carousel changes that will change Header, Footer, and Main
     carouselElement.addEventListener("slid.bs.carousel", () => {
       changeHeaderInfoToActiveSlide();
       changeFooterInfoToActiveSlide();
       // changeCenterInfoToActiveSlide()
     });
+
 
     function changeHeaderInfoToActiveSlide() {
       const activeSlideIndex = getCurrentSlideIndex();
@@ -92,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
       headerSel.innerHTML = 
       `<a href="#"></a>
       <a href="#"></a>
-      <a href="#" class="header-title city-location-input">
+      <a href="#" class="header-title city-location-area">
         <span class="city-name">${slide.cityName}</span>
           <button type="submit" class="city-submit-btn"><i class="bi bi-search font-13"></i></button>
         </a>
@@ -100,13 +160,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="#" class="show-on-theme-dark" data-toggle-theme ><i class="bi bi-lightbulb-fill color-yellow-dark font-13"></i></a>
       <a data-bs-toggle="offcanvas" data-bs-target="#menu-color" href="#"><i class="bi bi-gear-fill font-13 color-highlight"></i></a>`
 
-      // Else, if not weather, show city text area form
+      // Else (if not weather) show city text area form, including autocomplete city suggestion
     } else {
       const headerSel = document.querySelector(".header-bar");
       headerSel.innerHTML = 
       `<a href="#"></a>
       <a href="#"></a>
-      <a href="#" class="header-title city-location-input">
+      <a href="#" class="header-title city-location-area">
         <div id="autocomplete-container" class="autocomplete-container"></div>
         <button type="submit" class="city-submit-btn"><i class="bi bi-search font-13"></i></button>
       </a>
@@ -125,6 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function addressAutocomplete(containerElement, callback, options) {
   // create input element
   var inputElement = document.createElement("input");
+  inputElement.setAttribute("class", "city-location-input");
   inputElement.setAttribute("type", "text");
   inputElement.setAttribute("placeholder", options.placeholder);
   containerElement.appendChild(inputElement);
@@ -151,7 +212,7 @@ function addressAutocomplete(containerElement, callback, options) {
   // Focused item in the autocomplete list. This variable is used to navigate with buttons
   var focusedItemIndex;
 
-  // Execute a function when someone writes in the text field:
+  // Execute a function when someone writes in the text field
   inputElement.addEventListener("input", function(e) {
     var currentValue = this.value;
 
@@ -178,7 +239,7 @@ function addressAutocomplete(containerElement, callback, options) {
       currentPromiseReject = reject;
 
       var apiKey = "89f58c6e16014045925305d36ab98265";
-      var url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(currentValue)}&limit=5&apiKey=${apiKey}`;
+      var url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(currentValue)}&limit=6&apiKey=${apiKey}`;
       
       if (options.type) {
           url += `&type=${options.type}`;
@@ -197,27 +258,26 @@ function addressAutocomplete(containerElement, callback, options) {
 
     promise.then((data) => {
       currentItems = data.features;
-
-      // create a DIV element that will contain the items (values):
+      // create a DIV element that will contain the items (values)
       var autocompleteItemsElement = document.createElement("div");
       autocompleteItemsElement.setAttribute("class", "autocomplete-items");
       containerElement.appendChild(autocompleteItemsElement);
 
       // For each item in the results
       data.features.forEach((feature, index) => {
-        // Create a DIV element for each element:
+        // Create a DIV element for each element
         var itemElement = document.createElement("DIV");
         // Set formatted address as item value
-        itemElement.innerHTML = feature.properties.formatted;
-
-        // Set the value for the autocomplete text field and notify:
+        const formatCity = `${feature.properties.city}, ${feature.properties.state_code}`
+        itemElement.innerHTML = formatCity;
+        
+        // Set the value for the autocomplete text field and notify
         itemElement.addEventListener("click", function(e) {
-          inputElement.value = currentItems[index].properties.formatted;
-
+          // Format address to city, st
+          const formatCity = `${currentItems[index].properties.city}, ${currentItems[index].properties.state_code}`
+          inputElement.value = formatCity;
           callback(currentItems[index]);
-// Change icon from mag glas to ass button link
-// link will send city to server and get weather.
-          // Close the list of autocompleted values:
+          // Close the list of autocompleted values
           closeDropDownList();
         });
 
@@ -276,7 +336,8 @@ function addressAutocomplete(containerElement, callback, options) {
     items[index].classList.add("autocomplete-active");
 
     // Change input value and notify
-    inputElement.value = currentItems[index].properties.formatted;
+    const formatCity = `${currentItems[index].properties.city}, ${currentItems[index].properties.state_code}`
+    inputElement.value = formatCity;
     callback(currentItems[index]);
   }
 
@@ -285,7 +346,6 @@ function addressAutocomplete(containerElement, callback, options) {
     if (autocompleteItemsElement) {
       containerElement.removeChild(autocompleteItemsElement);
     }
-
     focusedItemIndex = -1;
   }
 
@@ -319,16 +379,32 @@ function addressAutocomplete(containerElement, callback, options) {
 
 addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
   console.log("Selected city: ");
-  console.log(data);
+  const { properties: { city, state_code, lat, lon } } = data;
+  const filteredData = { 
+    cityName: `${city}, ${state_code}`,
+    lat, 
+    lon
+};
+currentSelCityFromInput = filteredData;
+  console.log(currentSelCityFromInput);
+
+
+
+
+
 }, {
-    placeholder: "Enter a city here",
+    placeholder: "Enter a city",
   type: "city"
 });
-      
-      
+const button = document.querySelector('.city-submit-btn');
+// Event listener
+button.addEventListener('click', function(event) {
+  event.preventDefault(); // prevent the default form submission behavior
+  updateUserCity(currentSelCityFromInput);
+});
     }
-    
   }
+
 
     function changeFooterInfoToActiveSlide() {
       const activeSlideIndex = getCurrentSlideIndex();
@@ -428,8 +504,7 @@ addressAutocomplete(document.getElementById("autocomplete-container"), (data) =>
           hourlyBarSel.innerHTML = ``;
         }
 
-    }
-
+    };
 
     // function changeCenterInfoToActiveSlide() {
     //   const activeSlideIndex = getCurrentSlideIndex();
