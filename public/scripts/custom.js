@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log('User document updated with current selected city');
         // Add any additional desired code logic here
+        // reload page here? nothing doe with response from front end
       })
       .catch(error => {
         console.error('There was a problem with the PUT request:', error);
@@ -121,6 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log('User document updated with current selected city');
         // Add any additional desired code logic here
+        // must reload page to show new city is added, carousel event could do that?
+
       })
       .catch(error => {
         console.error('There was a problem with the PUT request:', error);
