@@ -6,16 +6,53 @@ module.exports = {
    // console.log(`sessionID from getIndex: ${req.sessionID}`);
    // req.session.user = req.sessionID;
  // },
-  // This needs to be split up into two different req and res, so that one may be res as JSON and one as render(index)
-  // Myabe next, must differenitate between what should be EJS and what should be AJAX
+  // This needs to be split up into two different req and res, so that one may be res as JSON and one as render(index)???
   postCurrentLoc: async (req, res) => {
-    // console.log(`/weather/POST postCurrentLoc`);
+    console.log(`/weather/POST postCurrentLoc`);
     try {
       // Save current lat and long from client req
       let long = req.body.long;
       let lat = req.body.lat;
+      const geocodingURL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${long}&limit=5&appid=${process.env.OW_API}`;
+      // Get city and state name for location for current location
+      fetch(geocodingURL)
+      .then((response) => response.json())
+      .then((geoData) => {
+        // Extract cityName and stateName from geoData
+        const cityName = geoData[0].name;
+        const stateName = geoData[0].state;
+        // Return cityName and stateName in response
+        res.json({ cityName, stateName });
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+      });
 
-        const geocodingURL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${long}&limit=5&appid=${process.env.OW_API}`;
+      // Assuming that userID is the value of the userID field in the user document
+      User.findOne({ userID: req.body.userID })
+      .select('citylist') // Include only the citylist field in the result
+      .exec((err, user) => {
+        if (err) {
+          console.error(err);
+          // Handle the error
+          return;
+        }
+      
+        if (!user) {
+          // User document not found
+          return;
+        }
+      
+        // Access the citylist field
+        const cityList = user.citylist;
+        console.log(cityList);
+      });
+
+  
+
+
+        //const geocodingURL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${long}&limit=5&appid=${process.env.OW_API}`;
         const aqURL = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${long}&appid=${process.env.OW_API}`;
         const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${long}&appid=${process.env.OW_API}&units=imperial&exclude=minutely`;
         const endpoints = [geocodingURL, aqURL, weatherURL];
@@ -80,7 +117,6 @@ module.exports = {
         loTemp: Math.round(owData.daily[0].temp.min),
         hiTemp: Math.round(owData.daily[0].temp.max),
         sunsetTime: unixTo12hr(owData.current.sunset),
-
         sunriseTime: unixTo12hr(owData.current.sunrise),
         curHum: owData.current.humidity,
         windDir: windDirection(owData.current.wind_deg),
@@ -96,7 +132,7 @@ module.exports = {
     }
   },
   putNewCity: async (req, res) => {
-    console.log(`/weather/PUT - putNewCity`);
+    console.log(`/weather PUT - putNewCity`);
   const { userID, cityName } = req.body;
 
     try {
@@ -112,9 +148,10 @@ module.exports = {
       res.status(500).send('Internal server error');
    }
   },
+
   // Repalces current city in 0 index spot with current city
   putCurrentCity: async (req, res) => {
-    console.log(`/weather/PUT - putCurrentCity`);
+    console.log(`/weather/current PUT - putCurrentCity`);
     const { userID, cityName } = req.body;
   
       try {
@@ -124,6 +161,14 @@ module.exports = {
           { new: true }
         );
     
+
+          // Add logic for checking database for list of cities (and lon and lat), use a node native fetch method to get the weather, and sending all that weather to the front end as the current list of weather, ejs should be rendered based on that array of weathers
+          // 
+
+
+
+
+
        res.json(user);
      } catch(err) {
         console.error(err);
