@@ -13,21 +13,6 @@ module.exports = {
       // Save current lat and long from client req
       let long = req.body.long;
       let lat = req.body.lat;
-      const geocodingURL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${long}&limit=5&appid=${process.env.OW_API}`;
-      // Get city and state name for location for current location
-      fetch(geocodingURL)
-      .then((response) => response.json())
-      .then((geoData) => {
-        // Extract cityName and stateName from geoData
-        const cityName = geoData[0].name;
-        const stateName = geoData[0].state;
-        // Return cityName and stateName in response
-        res.json({ cityName, stateName });
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-      });
 
       // Assuming that userID is the value of the userID field in the user document
       User.findOne({ userID: req.body.userID })
@@ -52,7 +37,7 @@ module.exports = {
   
 
 
-        //const geocodingURL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${long}&limit=5&appid=${process.env.OW_API}`;
+        const geocodingURL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${long}&limit=5&appid=${process.env.OW_API}`;
         const aqURL = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${long}&appid=${process.env.OW_API}`;
         const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${long}&appid=${process.env.OW_API}&units=imperial&exclude=minutely`;
         const endpoints = [geocodingURL, aqURL, weatherURL];
