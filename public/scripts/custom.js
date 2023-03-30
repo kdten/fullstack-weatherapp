@@ -29,14 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Start of weather functions
     let slideCityAdd = {};
     let arrOfSlides = [];
-    let slide0weather;
     // Global var gets set to current selected city data object
     let currentSelCityFromInput;
     window.addEventListener("load", () => {
-      getSlide0Weather();
+      initGetAllSlides();
     });
 
-    async function getSlide0Weather() {
+    async function initGetAllSlides() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
           const long = position.coords.longitude;
@@ -48,19 +47,36 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(locdata),
           });
           const data = await response.json();
-          slide0weather = data;
-          arrOfSlides.push(slide0weather);
-
-          let currentLocation = {
-            cityName: data.cityName,
-            lat: lat,
-            lon: long
-          };
-          updateCurrentCity(currentLocation)
+          arrOfSlides = data;
+          if (arrOfSlides.length > 1) {
+            // if there is more than one slide, we need to insert arrayOfSlides.length-1 number of slides into the inner-carousel as the last elements
+            for (let i = 0; i < arrOfSlides.length - 1; i++) {
+              const carouselInner = document.querySelector(".carousel-inner");
+              const carouselItem = document.createElement("div");
+              carouselItem.classList.add("carousel-item");
+              carouselItem.innerHTML = `
+                <div class="card rounded-l shadow-l m-3" style="height:550px">
+                  <div class="card-center text-center">
+                    <div class="content">
+                    
+                   </div>
+                  </div>
+                </div>
+              `;
+              // insert the new carousel item before the last <div class="carousel-item"> in the carousel-inner
+              carouselInner.insertBefore(
+                carouselItem,
+                carouselInner.lastElementChild
+                );
+            }
+          }
           arrOfSlides.push(slideCityAdd);
+          console.log("arr of slides: " + JSON.stringify(arrOfSlides));
+          console.log(`arr of slides: ${arrOfSlides.length}`)
+
           changeHeaderInfoToActiveSlide();
           changeFooterInfoToActiveSlide();
-          // changeCenterInfoToActiveSlide();
+          changeCenterInfoToActiveSlide();
         });
       }
     }
@@ -80,40 +96,68 @@ document.addEventListener("DOMContentLoaded", () => {
       return -1;
     }
 
-    // PUT for current city, replaces 0 index in db
-    function updateCurrentCity(city) {
-      fetch('/weather/current', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          cityName: city
-        })
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    // make function listCtites list the cities on the page from the arrOfSlides array, use an if statement to make sure that the 0 index item does not get the x button, and skip the last slide item
+    function listCities() {
+      const cityList = document.querySelector('.list-group-m');
+      cityList.innerHTML = '';
+      for (let i = 0; i < arrOfSlides.length - 1; i++) {
+        const cityItem = document.createElement('a');
+        cityItem.classList.add('list-group-item');
+        cityItem.setAttribute('href', '#');
+        if (i === 0) {
+          cityItem.innerHTML = `<a href="#" class="list-group-item">
+          <div>${arrOfSlides[i].cityName}</div>
+          </a>`;
+        } else {
+          cityItem.innerHTML = `<a href="#" class="list-group-item">
+          <div>${arrOfSlides[i].cityName}</div>
+          <i class="bi bi-x-circle-fill color-red-light font-15"></i>
+          </a>`;
         }
-        console.log('User document updated with current selected city');
-        // Add any additional desired code logic here
-        // reload page here? nothing doe with response from front end
-      })
-      .catch(error => {
-        console.error('There was a problem with the PUT request:', error);
-      });
+        cityList.appendChild(cityItem);
+      }
     }
+
+
+
+    // // PUT for current city, replaces 0 index in db
+    // function updateCurrentCity(city) {
+    //   fetch('/weather/current', {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //     cityName: city
+    //     })
+    //   })
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     console.log('User document updated with current selected city');
+    //     // Add any additional desired code logic here
+    //     // reload page here? nothing doe with response from front end
+    //   })
+    //   .catch(error => {
+    //     console.error('There was a problem with the PUT request:', error);
+    //   });
+    // }
 
 
     // PUT for adding city to user document in db
     function updateUserCity(city) {
+      const { lat, lon, cityName } = city;
+
       fetch('/weather', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          cityName: city
+          cityName: cityName,
+          lat: lat,
+          lon: lon
         })
       })
       .then(response => {
@@ -123,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('User document updated with current selected city');
         // Add any additional desired code logic here
         // must reload page to show new city is added, carousel event could do that?
-
       })
       .catch(error => {
         console.error('There was a problem with the PUT request:', error);
@@ -139,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     carouselElement.addEventListener("slid.bs.carousel", () => {
       changeHeaderInfoToActiveSlide();
       changeFooterInfoToActiveSlide();
-      // changeCenterInfoToActiveSlide()
+      changeCenterInfoToActiveSlide()
     });
 
 
@@ -282,6 +325,7 @@ function addressAutocomplete(containerElement, callback, options) {
           callback(currentItems[index]);
           // Close the list of autocompleted values
           closeDropDownList();
+          console.log('closed')
         });
 
         autocompleteItemsElement.appendChild(itemElement);
@@ -383,31 +427,50 @@ function addressAutocomplete(containerElement, callback, options) {
 addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
   console.log("Selected city: ");
   const { properties: { city, state_code, lat, lon } } = data;
+
   const filteredData = { 
     cityName: `${city}, ${state_code}`,
     lat, 
     lon
 };
 currentSelCityFromInput = filteredData;
-  console.log(currentSelCityFromInput);
-
-
-
-
 
 }, {
-    placeholder: "Enter a city",
+    placeholder: "Enter city",
   type: "city"
 });
+
 const button = document.querySelector('.city-submit-btn');
 // Event listener
 button.addEventListener('click', function(event) {
   event.preventDefault(); // prevent the default form submission behavior
+  // adds city to database
   updateUserCity(currentSelCityFromInput);
+  // update the array of slides/cities
+  arrOfSlides.splice(arrOfSlides.length - 1, 0, currentSelCityFromInput);
+  // run list of cities function
+  listCities(currentSelCityFromInput);
+  // insert the currentSelCityFromInput the current slide
+  insertCity(currentSelCityFromInput);
+
+  function insertCity() {
+  // insert the new city into the carousel
+    const carouselInner = document.querySelector('.carousel-inner');
+    const carouselItem = document.createElement('div');
+    carouselItem.classList.add('carousel-item');
+    carouselItem.innerHTML = `
+    <div class="card rounded-l shadow-l m-3" style="height:550px">
+      <div class="card-center text-center">
+        <div class="content">
+          
+        </div>
+      </div>
+    </div>`;
+    carouselInner.insertBefore(carouselItem, carouselInner.lastElementChild);
+  }
 });
     }
   }
-
 
     function changeFooterInfoToActiveSlide() {
       const activeSlideIndex = getCurrentSlideIndex();
@@ -477,6 +540,7 @@ button.addEventListener('click', function(event) {
                                     <div class="hour-bar-time font-700">NOW</div>
                                   </div>`;
 
+          // The rest of the hours
           for (let i = 1; i < 30; i++) {
             // Set up hour for unix calculation and display
             const hourDate = new Date(slide.hourly[i].dt * 1000);
@@ -486,7 +550,7 @@ button.addEventListener('click', function(event) {
               timeOfDay = "P";
             }
             const formattedTime = (hours % 12 || 12) + timeOfDay.charAt(0);
-            // Iterate through rest of daily(s)
+            // Iterate through rest of hourlys
             hourlyBarSel.innerHTML += `<div class="hour-element">
                                       <img
                                         class="hour-bar-icon-sm"
@@ -509,80 +573,73 @@ button.addEventListener('click', function(event) {
 
     };
 
-    // function changeCenterInfoToActiveSlide() {
-    //   const activeSlideIndex = getCurrentSlideIndex();
-    //   const slide = arrOfSlides[activeSlideIndex];
+    function changeCenterInfoToActiveSlide() {
+      const activeSlideIndex = getCurrentSlideIndex();
+      const slide = arrOfSlides[activeSlideIndex];
 
-    //   // Populate center display
-    //   const carouselItemSel = document.querySelector(".carousel-item.active");
-    //   if (slide.cityName) {
-    //     carouselItemSel.innerHTML = ;
- 
+      // Populate center display
+      const carouselItemSel = document.querySelector(".carousel-item.active");
+      if (slide.cityName) {
+        carouselItemSel.innerHTML = `
+           <div class="card rounded-l shadow-l m-3" style="height:550px">
+                    <div class="card-center text-center">
+                      <div class="content"></div>
+              <div class="main-weather">
 
+              <div class="main-temp-and-feelslike">
 
-    //   } else {
-    //     // display add city page AKA list of cities
-    //   }
+                <span class="main-temp font-50">${slide.curTemp}°</span>
+                <span class="font-8 feelslike-text">
+                  <span class="feels-text">feels</span>
+                  <span class="like-text font-10">&nbsp;like</span>
+                </span>
+                <span class="feels-like-temp font-34">${slide.feelsTemp}°</span>
+              </div>
 
-    // }
+              <div class="main-center-section">
 
+                <div class="left-main">
+                  <h5>L ${slide.loTemp}°</h5>
+                  <hr class="main-divider"/>
+                  <div class="wind-container">
+                    <img src="images/wind-icons-light/${slide.windDir}.png" class="wind-image"></img>
+                    <span class="font-12 wind-text">
+                      <span class="wind-num-text">${slide.windSpeed}</span>
+                      <span class="mph-text">mph</span>
+                    </span>
+                  </div>
+                  <i class="bi bi-sunrise font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;${slide.sunriseTime}<span class="rise-dif"></span></i>
+                  <i class="bi bi-sunset font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;${slide.sunsetTime}<span class="set-dif"></span></span></i>
 
-    //           `<div class="main-weather">
+                </div>
 
-    //           <div class="main-temp-and-feelslike">
+                <div class="center-main">
+                  <img
+                    src="hd-icons/${slide.hdIcon}.png"
+                    alt=""
+                    srcset=""
+                    id="main-weather-icon"
+                  />
+                  <h5 class="'main-weather-desc">${slide.curDesc}</h5>
+                </div>
 
-    //             <span class="main-temp font-50">${data.curTemp}°</span>
-    //             <span class="font-8 feelslike-text">
-    //               <span class="feels-text">feels</span>
-    //               <span class="like-text font-10">&nbsp;like</span>
-    //             </span>
-    //             <span class="feels-like-temp font-34">${data.feelsTemp}°</span>
-    //           </div>
+                <div class="right-main">
+                  <h5>H ${slide.hiTemp}°</h5>
+                  <hr class="main-divider"/>
+                  <i class="bi bi-umbrella font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;&nbsp;${slide.chanceRain}%</span></i>
+                  <i class="bi bi-moisture font-18 color-theme"><span class="humidity-icon"><span class="humidity-text font-14"> &nbsp;&nbsp;&nbsp;${slide.curHum}%</span></i>
+                  <i class="bi bi-speedometer font-18 color-theme"><span class="humidity-icon"><span class="humidity-text font-14"> &nbsp;&nbsp;&nbsp;${slide.aqi}/4</span></i>
 
-    //           <div class="main-center-section">
-
-    //             <div class="left-main">
-    //               <h5>L ${data.loTemp}°</h5>
-    //               <hr class="main-divider"/>
-    //               <div class="wind-container">
-    //                 <img src="images/wind-icons-light/${data.windDir}.png" class="wind-image"></img>
-    //                 <span class="font-12 wind-text">
-    //                   <span class="wind-num-text">${data.windSpeed}</span>
-    //                   <span class="mph-text">mph</span>
-    //                 </span>
-    //               </div>
-    //               <i class="bi bi-sunrise font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;${data.sunriseTime}<span class="rise-dif"></span></i>
-    //               <i class="bi bi-sunset font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;${data.sunsetTime}<span class="set-dif"></span></span></i>
-
-    //             </div>
-
-    //             <div class="center-main">
-    //               <img
-    //                 src="hd-icons/${data.hdIcon}.png"
-    //                 alt=""
-    //                 srcset=""
-    //                 id="main-weather-icon"
-    //               />
-    //               <h5 class="'main-weather-desc">${data.curDesc}</h5>
-    //             </div>
-
-    //             <div class="right-main">
-    //               <h5>H ${data.hiTemp}°</h5>
-    //               <hr class="main-divider"/>
-    //               <i class="bi bi-umbrella font-18 color-theme"><span class="rain-chance-icon"><span class="rain-chance-text font-14">&nbsp;&nbsp;&nbsp;${data.chanceRain}%</span></i>
-    //               <i class="bi bi-moisture font-18 color-theme"><span class="humidity-icon"><span class="humidity-text font-14"> &nbsp;&nbsp;&nbsp;${data.curHum}%</span></i>
-    //               <i class="bi bi-speedometer font-18 color-theme"><span class="humidity-icon"><span class="humidity-text font-14"> &nbsp;&nbsp;&nbsp;${data.aqi}/4</span></i>
-
-    //             </div>
-    //             </div>
-    //           </div>`
-
-    //           // hourlyBar.innerHTML += hourElement;
-    //         });
-    //     });
-    //   }
-    // });
-
+                </div>
+                </div>
+              </div>
+    </div>
+                    </div>
+                  </div>`
+            } else {
+              
+            }
+    };
 
 
     //Caching Global Variables

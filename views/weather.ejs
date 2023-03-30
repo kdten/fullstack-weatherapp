@@ -56,39 +56,25 @@
 
     <!-- Your Page Content Goes Here-->
     <div class="page-content header-clear-small">
-
-      <div data-card-height="550" class="card card-style bg-18 rounded-l shadow-l">
-        <div class="card-overlay bg-gradient-fade">
-          <!-- Weather slider inside background card -->
-
           <!-- Carousel start --------------------------- -->
           <div id="carouselExampleNoRide" class="carousel slide is-static" data-bs-interval="false">
-
-            <% /* Create indicators based on how many items are in citylist */ %>
-              <div class="carousel-indicators">
-                <% for (let i=0; i < citylist.length; i++) { %>
-                  <button type="button" data-bs-target="#carouselExampleNoRide" data-bs-slide-to="<%= i %>" <% if
-                    (i===0) { %>class="active" aria-current="true" <% } %> aria-label="Slide <%= i + 1 %>"></button>
-                  <% } %>
-              </div>
-
               <div class="carousel-inner">
-
-
-
+                <!-- End of bootstrap carousel, start of DuoMobile card -->
                 <div class="carousel-item active">
-                  <div data-card-height="550" class="card rounded-m shadow-l">
-                    <div class="card-center text-center m-3">
 
+                  <div class="card rounded-l shadow-l m-3" style="height:550px">
+                    <div class="card-center text-center">
+                      <div class="content">
+                        
+                      </div>
                     </div>
-                    <div class="card-overlay rounded-m bg-gradient-fade opacity-90"></div>
                   </div>
                 </div>
 
                 <div class="carousel-item">
-                  <div data-card-height="550" class="card rounded-m shadow-l">
-                    <div class="card-center text-center m-3">
-                      <div class="card card-style">
+                  <div class="card card-style rounded-l shadow-l m-3" >
+                    
+                      
                         <div class="content">
                           <h4>List of locations</h4>
                           <div class="list-group list-custom list-group-m rounded-xs">
@@ -105,10 +91,9 @@
 
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      
+                    
                   </div>
-                  <div class="card-overlay rounded-m bg-gradient-fade opacity-90"></div>
                 </div>
               </div>
 
@@ -123,16 +108,9 @@
                 data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
-              </button>s
+              </button>
 
           </div>
-
-
-
-
-
-        </div>
-      </div>
       <!-- End of Page Content-->
     </div>
     <!--End of Page ID-->

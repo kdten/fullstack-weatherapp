@@ -18,12 +18,12 @@ module.exports = {
         });
         user = await newUser.save();
       }
-  
+      
       // Get citylist from the database for the user
       const citylist = user.citylist;
   
       // Render the index page and pass in the citylist data
-      res.render("index", {
+      res.render("weather", {
         citylist: citylist
       });
   
