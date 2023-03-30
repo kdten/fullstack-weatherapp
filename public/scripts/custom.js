@@ -105,19 +105,29 @@ document.addEventListener("DOMContentLoaded", () => {
         cityItem.classList.add('list-group-item');
         cityItem.setAttribute('href', '#');
         if (i === 0) {
-          cityItem.innerHTML = `<a href="#" class="list-group-item">
+          cityItem.innerHTML = `
           <div>${arrOfSlides[i].cityName}</div>
-          </a>`;
+          `;
         } else {
-          cityItem.innerHTML = `<a href="#" class="list-group-item">
+          cityItem.innerHTML = `
           <div>${arrOfSlides[i].cityName}</div>
-          <i class="bi bi-x-circle-fill color-red-light font-15"></i>
-          </a>`;
+          <a href="#"> <i class="bi bi-x-circle-fill color-red-light font-15"></i>
+          </a>
+          `;
         }
         cityList.appendChild(cityItem);
       }
-    }
+    };
 
+// add event listener to the city list, if the target is the x button, then remove the city from the arrOfSlides array, and then call the listCities function to update the list
+    document.querySelector('.list-group-m').addEventListener('click', (e) => {
+      if (e.target.classList.contains('bi-x-circle-fill')) {
+        const cityToRemove = e.target.parentElement.innerText;
+        arrOfSlides = arrOfSlides.filter((city) => city.cityName !== cityToRemove);
+        listCities();
+
+      }
+    });
 
 
     // // PUT for current city, replaces 0 index in db
