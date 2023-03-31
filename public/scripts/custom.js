@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
           arrOfSlides.push(slideCityAdd);
-          console.log("arr of slides: " + JSON.stringify(arrOfSlides));
+          //console.log("arr of slides: " + JSON.stringify(arrOfSlides));
           console.log(`arr of slides: ${arrOfSlides.length}`)
 
           changeHeaderInfoToActiveSlide();
@@ -111,7 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           cityItem.innerHTML = `
           <div>${arrOfSlides[i].cityName}</div>
-          <a href="#"> <i class="bi bi-x-circle-fill color-red-light font-15"></i>
+          <a href="#">
+            <i class="bi bi-x-circle-fill color-red-light font-15 mr-2"></i>
           </a>
           `;
         }
@@ -119,14 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-// add event listener to the city list, if the target is the x button, then remove the city from the arrOfSlides array, and then call the listCities function to update the list
+// add event listener to the city list x button, if the target is the x button, then remove the city from the arrOfSlides array, and then call the listCities function to update the list
     document.querySelector('.list-group-m').addEventListener('click', (e) => {
       if (e.target.classList.contains('bi-x-circle-fill')) {
         const cityToRemove = e.target.parentElement.innerText;
+        // remove the city from the arrOfSlides array
         arrOfSlides = arrOfSlides.filter((city) => city.cityName !== cityToRemove);
-        listCities();
 
-        // use a delete request to delete the city from the database
+        // use a delete request to delete the city from the database, add check to check for user id
         fetch('/weather', {
           method: 'DELETE',
           headers: {
@@ -134,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify({
             cityName: cityToRemove
+
           })
         })
         .then(response => {
@@ -142,13 +144,14 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           console.log('User document updated with current selected city');
           // Add any additional desired code logic here
-          // reload page here? nothing doe with response from front end
+          // reload page here? nothing done with response from front end
         }
         )
         .catch(error => {
           console.error('There was a problem with the DELETE request:', error);
         }
         );
+        listCities();
       }
     });
 
@@ -194,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       })
       .then(response => {
-        if (!response.ok) {
+        if (!response.ok) {PUT
           throw new Error('Network response was not ok');
         }
         console.log('User document updated with current selected city');
@@ -213,16 +216,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const carouselElement = document.querySelector(".carousel");
     // Event listener for carousel changes that will change Header, Footer, and Main
     carouselElement.addEventListener("slid.bs.carousel", () => {
-      changeHeaderInfoToActiveSlide();
-      changeFooterInfoToActiveSlide();
-      changeCenterInfoToActiveSlide()
+        changeHeaderInfoToActiveSlide();
+        changeFooterInfoToActiveSlide();
+        changeCenterInfoToActiveSlide();
     });
 
 
     function changeHeaderInfoToActiveSlide() {
       const activeSlideIndex = getCurrentSlideIndex();
       const slide = arrOfSlides[activeSlideIndex];
-      // If the slide is weather, display header with city name inserted
+      // If the slide is a weather slide, display header with city name inserted
+
       if (slide.cityName) {
       // const cityNameSel = document.querySelector(".city-name");
       // cityNameSel.textContent = slide.cityName;
@@ -618,6 +622,11 @@ button.addEventListener('click', function(event) {
       const activeSlideIndex = getCurrentSlideIndex();
       const slide = arrOfSlides[activeSlideIndex];
 
+            // add if statement to check if the active slide is the last slide, if it is, run the listCities function
+      if (activeSlideIndex === arrOfSlides.length - 1) {
+        listCities(currentSelCityFromInput);
+      }
+      
       // Populate center display
       // <div class="carousel-inner">
       //           <!-- End of bootstrap carousel, start of DuoMobile card -->
@@ -631,24 +640,9 @@ button.addEventListener('click', function(event) {
       //               </div>
       //             </div>
       //           </div>
-      // Select the first div with a class of content inside the div with the class of carousel-inner
-      // const contentSel = document.querySelector(".carousel-inner .content");
-      // Select the first div with a class of content inside the div with the class of carousel-item
-      // const contentSel = document.querySelector(".carousel-item .content");
-      // Select the first div with a class of content inside the div with the class of carousel-item and is active
-      // const contentSel = document.querySelector(".carousel-item.active .content");
-      // Select the first div with a class of content inside the div with the class of carousel-item and is active
-      // const contentSel = document.querySelector(".carousel-item.active .content");
-      // Select the first div with a class of content inside the div with the class of carousel-item and is active
-      // const contentSel = document.querySelector(".carousel-item.active .content");
-      // Select the first div with a class of content inside the div with the class of carousel-item and is active
+      //         </div>
+
       
-
-   
-
-
-      const contentSel = document.querySelector(".content");
-
 
       const carouselItemSel = document.querySelector(".carousel-item.active");
       if (slide.cityName) {

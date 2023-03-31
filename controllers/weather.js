@@ -207,5 +207,21 @@ module.exports = {
         console.error(err);
         res.status(500).send('Internal server error');
      }
-    }
+    },
+
+  deleteCity: async (req, res) => {
+      console.log(`/weather DELETE - deleteCity`);
+      const { userID, cityName } = req.body;
+      try {
+          const user = await User.findOneAndUpdate(
+              { userID },
+              { $pull: { citylist: cityName } },
+              { new: true }
+          );
+          res.status(200).send(user.citylist);
+      } catch (err) {
+          console.log(err);
+          res.status(500).send(err.message);
+      }
+  }
 };

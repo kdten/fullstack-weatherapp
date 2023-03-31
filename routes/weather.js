@@ -11,4 +11,6 @@ router.put("/", weatherController.putNewCity)
 
 router.put("/current", weatherController.putCurrentCity)
 
+router.delete("/", weatherController.deleteCity)
+
 module.exports = router
