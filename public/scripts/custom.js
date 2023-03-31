@@ -126,6 +126,29 @@ document.addEventListener("DOMContentLoaded", () => {
         arrOfSlides = arrOfSlides.filter((city) => city.cityName !== cityToRemove);
         listCities();
 
+        // use a delete request to delete the city from the database
+        fetch('/weather', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            cityName: cityToRemove
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          console.log('User document updated with current selected city');
+          // Add any additional desired code logic here
+          // reload page here? nothing doe with response from front end
+        }
+        )
+        .catch(error => {
+          console.error('There was a problem with the DELETE request:', error);
+        }
+        );
       }
     });
 
@@ -450,6 +473,11 @@ currentSelCityFromInput = filteredData;
   type: "city"
 });
 
+/* 
+  End of autocomplete city code
+*/
+
+
 const button = document.querySelector('.city-submit-btn');
 // Event listener
 button.addEventListener('click', function(event) {
@@ -516,18 +544,19 @@ button.addEventListener('click', function(event) {
           const weekday = date.toLocaleString("default", { weekday: "short" });
           const formattedDate = `${month} ${day}`;
           // Iterate through rest of daily(s)
-          dayBarSel.innerHTML += `<div class="day-element">
-                          <img
-                            class="day-bar-icon-sm"
-                            src="icons/${slide.daily[i].weather[0].icon}.png"
-                            alt=""
-                            srcset=""
-                            id="weather-icon"
-                          />
-                          <div class="date"><span class="font-700">${weekday}</span> ${formattedDate}</div>
-                          <div class="low-temp">${slide.daily[i].temp.min.toFixed(0)}°</div>
-                          <div class="high-temp">${slide.daily[i].temp.max.toFixed(0)}°</div>
-                          </div>`;
+          dayBarSel.innerHTML += `
+            <div class="day-element">
+            <img
+              class="day-bar-icon-sm"
+              src="icons/${slide.daily[i].weather[0].icon}.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="date"><span class="font-700">${weekday}</span> ${formattedDate}</div>
+            <div class="low-temp">${slide.daily[i].temp.min.toFixed(0)}°</div>
+            <div class="high-temp">${slide.daily[i].temp.max.toFixed(0)}°</div>
+            </div>`;
           }
         } else {
           dayBarSel.innerHTML = ``;
@@ -538,17 +567,18 @@ button.addEventListener('click', function(event) {
         const hourlyBarSel = document.querySelector(".hourly-bar");
         if(slide.hourly) {
           // First hour here so hour says "Now"
-          hourlyBarSel.innerHTML = `<div class="hour-element">
-                                    <img
-                                      class="hour-bar-icon-sm"
-                                      src="icons/${slide.hourly[0].weather[0].icon}.png"
-                                      alt=""
-                                      srcset=""
-                                      id="weather-icon"
-                                    />
-                                    <div class="hour-bar-temp font-700">${slide.curTemp}°</div>
-                                    <div class="hour-bar-time font-700">NOW</div>
-                                  </div>`;
+          hourlyBarSel.innerHTML = `
+            <div class="hour-element">
+            <img
+              class="hour-bar-icon-sm"
+              src="icons/${slide.hourly[0].weather[0].icon}.png"
+              alt=""
+              srcset=""
+              id="weather-icon"
+            />
+            <div class="hour-bar-temp font-700">${slide.curTemp}°</div>
+            <div class="hour-bar-time font-700">NOW</div>
+            </div>`;
 
           // The rest of the hours
           for (let i = 1; i < 30; i++) {
@@ -561,21 +591,22 @@ button.addEventListener('click', function(event) {
             }
             const formattedTime = (hours % 12 || 12) + timeOfDay.charAt(0);
             // Iterate through rest of hourlys
-            hourlyBarSel.innerHTML += `<div class="hour-element">
-                                      <img
-                                        class="hour-bar-icon-sm"
-                                        src="icons/${
-                                          slide.hourly[i].weather[0].icon
-                                        }.png"
-                                        alt=""
-                                        srcset=""
-                                        id="weather-icon"
-                                      />
-                                      <div class="hour-bar-temp font-700">${slide.hourly[
-                                        i
-                                      ].temp.toFixed(0)}°</div>
-                                      <div class="hour-bar-time font-700">${formattedTime}</div>
-                                    </div>`;
+            hourlyBarSel.innerHTML += `
+              <div class="hour-element">
+              <img
+                class="hour-bar-icon-sm"
+                src="icons/${
+                  slide.hourly[i].weather[0].icon
+                }.png"
+                alt=""
+                srcset=""
+                id="weather-icon"
+              />
+              <div class="hour-bar-temp font-700">${slide.hourly[
+                i
+              ].temp.toFixed(0)}°</div>
+              <div class="hour-bar-time font-700">${formattedTime}</div>
+              </div>`;
           }
         } else {
           hourlyBarSel.innerHTML = ``;
@@ -588,6 +619,37 @@ button.addEventListener('click', function(event) {
       const slide = arrOfSlides[activeSlideIndex];
 
       // Populate center display
+      // <div class="carousel-inner">
+      //           <!-- End of bootstrap carousel, start of DuoMobile card -->
+      //           <div class="carousel-item active">
+
+      //             <div class="card rounded-l shadow-l m-3" style="height:550px">
+      //               <div class="card-center text-center">
+      //                 <div class="content">
+                        
+      //                 </div>
+      //               </div>
+      //             </div>
+      //           </div>
+      // Select the first div with a class of content inside the div with the class of carousel-inner
+      // const contentSel = document.querySelector(".carousel-inner .content");
+      // Select the first div with a class of content inside the div with the class of carousel-item
+      // const contentSel = document.querySelector(".carousel-item .content");
+      // Select the first div with a class of content inside the div with the class of carousel-item and is active
+      // const contentSel = document.querySelector(".carousel-item.active .content");
+      // Select the first div with a class of content inside the div with the class of carousel-item and is active
+      // const contentSel = document.querySelector(".carousel-item.active .content");
+      // Select the first div with a class of content inside the div with the class of carousel-item and is active
+      // const contentSel = document.querySelector(".carousel-item.active .content");
+      // Select the first div with a class of content inside the div with the class of carousel-item and is active
+      
+
+   
+
+
+      const contentSel = document.querySelector(".content");
+
+
       const carouselItemSel = document.querySelector(".carousel-item.active");
       if (slide.cityName) {
         carouselItemSel.innerHTML = `
