@@ -111,23 +111,28 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           cityItem.innerHTML = `
           <div>${arrOfSlides[i].cityName}</div>
-          <a href="#">
             <i class="bi bi-x-circle-fill color-red-light font-15 mr-2"></i>
-          </a>
+          
           `;
         }
         cityList.appendChild(cityItem);
       }
     };
 
+    // make function listCtites list the cities on the page from the arrOfSlides array, use an if statement to make sure that the 0 index item does not get the x button, and skip the last slide item
+
+
+
+
+
 // add event listener to the city list x button, if the target is the x button, then remove the city from the arrOfSlides array, and then call the listCities function to update the list
     document.querySelector('.list-group-m').addEventListener('click', (e) => {
       if (e.target.classList.contains('bi-x-circle-fill')) {
         const cityToRemove = e.target.parentElement.innerText;
-        // remove the city from the arrOfSlides array
+        // remove cityToRemove from arrOfSlides array
         arrOfSlides = arrOfSlides.filter((city) => city.cityName !== cityToRemove);
 
-        // use a delete request to delete the city from the database, add check to check for user id
+        // use a delete request to delete the city from the database
         fetch('/weather', {
           method: 'DELETE',
           headers: {
@@ -135,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify({
             cityName: cityToRemove
-
           })
         })
         .then(response => {
