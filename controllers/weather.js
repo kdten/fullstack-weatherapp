@@ -213,9 +213,10 @@ module.exports = {
       console.log(`/weather DELETE - deleteCity`);
       const { userID, cityName } = req.body;
       try {
+          // Find the user document and delete the city object and its data from the citylist array
           const user = await User.findOneAndUpdate(
               { userID },
-              { $pull: { citylist: cityName } },
+              { $pull: { citylist: { locationName: cityName } } },
               { new: true }
           );
           res.status(200).send(user.citylist);
@@ -223,5 +224,21 @@ module.exports = {
           console.log(err);
           res.status(500).send(err.message);
       }
-  }
+  },
+  getWeatherData: async (req, res) => {
+    console.log(`/weather DELETE - deleteCity`);
+    const { userID, cityName } = req.body;
+    try {
+        // Find the user document and delete the city object and its data from the citylist array
+        const user = await User.findOneAndUpdate(
+            { userID },
+            { $pull: { citylist: { locationName: cityName } } },
+            { new: true }
+        );
+        res.status(200).send(user.citylist);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
 };

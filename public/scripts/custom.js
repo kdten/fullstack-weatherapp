@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return -1;
     }
 
-    // make function listCtites list the cities on the page from the arrOfSlides array, use an if statement to make sure that the 0 index item does not get the x button, and skip the last slide item
+    // make function listCtites list the cities on the page from the arrOfSlides array, use an if statement to make sure that the 0 index item does not get the x button, and skip the last slide item. 
     function listCities() {
       const cityList = document.querySelector('.list-group-m');
       cityList.innerHTML = '';
@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
           cityItem.innerHTML = `
           <div>${arrOfSlides[i].cityName}</div>
             <i class="bi bi-x-circle-fill color-red-light font-15 mr-2"></i>
-          
           `;
         }
         cityList.appendChild(cityItem);
@@ -120,9 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // make function listCtites list the cities on the page from the arrOfSlides array, use an if statement to make sure that the 0 index item does not get the x button, and skip the last slide item
-
-
-
 
 
 // add event listener to the city list x button, if the target is the x button, then remove the city from the arrOfSlides array, and then call the listCities function to update the list
@@ -472,11 +468,21 @@ addressAutocomplete(document.getElementById("autocomplete-container"), (data) =>
   const filteredData = { 
     cityName: `${city}, ${state_code}`,
     lat, 
-    lon
-};
-currentSelCityFromInput = filteredData;
+    lon  
+  };
+  currentSelCityFromInput = filteredData;
 
-}, {
+  // change icon from search(magnifying glass) to add(plus sign)
+  const bisearchSel = document.querySelector('.bi-search');
+  bisearchSel.classList.remove('bi-search');
+  bisearchSel.classList.remove('font-13');
+  bisearchSel.classList.add('bi-plus');
+  bisearchSel.classList.add('font-18');
+
+  // Get the weather using using a native node fetch req using a POST method to the /weather route
+
+}, 
+{
     placeholder: "Enter city",
   type: "city"
 });
@@ -485,13 +491,22 @@ currentSelCityFromInput = filteredData;
   End of autocomplete city code
 */
 
-
+//the city add function is here
 const button = document.querySelector('.city-submit-btn');
 // Event listener
 button.addEventListener('click', function(event) {
   event.preventDefault(); // prevent the default form submission behavior
   // adds city to database
   updateUserCity(currentSelCityFromInput);
+  // Get the weather using using a native node fetch req using a POST method to the /weather route
+  
+  // change icon from search(magnifying glass) to add(plus sign)
+  const bisearchSel = document.querySelector('.bi-plus');
+  bisearchSel.classList.remove('bi-plus');
+  bisearchSel.classList.remove('font-18');
+  bisearchSel.classList.add('bi-search');
+  bisearchSel.classList.add('font-13');
+
   // update the array of slides/cities
   arrOfSlides.splice(arrOfSlides.length - 1, 0, currentSelCityFromInput);
   // run list of cities function
@@ -505,7 +520,7 @@ button.addEventListener('click', function(event) {
     const carouselItem = document.createElement('div');
     carouselItem.classList.add('carousel-item');
     carouselItem.innerHTML = `
-    <div class="card rounded-l shadow-l m-3" style="height:550px">
+    <div class="card rounded-l shadow-l m-4" style="height:550px">
       <div class="card-center text-center">
         <div class="content">
           
@@ -636,7 +651,7 @@ button.addEventListener('click', function(event) {
       //           <!-- End of bootstrap carousel, start of DuoMobile card -->
       //           <div class="carousel-item active">
 
-      //             <div class="card rounded-l shadow-l m-3" style="height:550px">
+      //             <div class="card rounded-l shadow-l m-4" style="height:550px">
       //               <div class="card-center text-center">
       //                 <div class="content">
                         
@@ -651,7 +666,7 @@ button.addEventListener('click', function(event) {
       const carouselItemSel = document.querySelector(".carousel-item.active");
       if (slide.cityName) {
         carouselItemSel.innerHTML = `
-           <div class="card rounded-l shadow-l m-3" style="height:550px">
+           <div class="card rounded-l shadow-l m-4" style="height:550px">
                     <div class="card-center text-center">
                       <div class="content"></div>
               <div class="main-weather">
