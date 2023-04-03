@@ -27,4 +27,4 @@ Smaller optimizations I would like to make include:
 
 ## Lessons Learned:
 
-Planning should be started long before the project is started. I learned that it is important to plan out the project in detail before starting to code. This will help you to avoid any major roadblocks and will help you to stay on track. I also learned that it is important to keep your code clean and organized. This will help you to avoid any confusion when you come back to the project later on.
+I firstly learned that planning should be started long before the project is started. I learned that it is important to plan out the project in detail before starting to code. This top-down view will help you to avoid any major roadblocks and will help you to stay on track. I also learned that it is important to keep your code clean and organized. This will help you to avoid any confusion when you come back to the project later on.
