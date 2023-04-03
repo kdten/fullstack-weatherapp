@@ -8,6 +8,7 @@ A full-stack PWA featuring the ability to save and auto-complete location search
 ## How It's Made:
 
 **Tech used:** 
+
 Front end built with HTML, CSS, and JavaScript. 
 
 Back end built with Node.js, MongoDB, with packages such as Express, sessions, Mongoose and EJS.
