@@ -1,11 +1,11 @@
 {
 "version": "1.0",
 "lang" : "en",
-"name" : "Duo",
+"name" : "Weather Station",
 "scope" : "/",
 "display" : "fullscreen",
 "start_url" : "/index.html",
-"short_name" : "Duo",
+"short_name" : "Weather Station",
 "description" : "",
 "orientation" : "portrait",
 "background_color": "#000000",
