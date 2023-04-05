@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           cityItem.innerHTML = `
           <div>${arrOfSlides[i].cityName}</div>
-            <i class="bi bi-x-circle-fill color-red-light font-15 mr-2"></i>
+            <i class="bi close-button bi-x-circle-fill color-red-light font-15 mr-2"></i>
           `;
         }
         cityList.appendChild(cityItem);
@@ -156,33 +156,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // PUT for adding city to user document in db, and getting weather data for that city
-    function updateUserCity(city) {
+    async function updateUserCity(city) {
       const { lat, lon, cityName } = city;
-
-      fetch('/weather', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          cityName: cityName,
-          lat: lat,
-          lon: lon
-        })
-      })
-      
-      .then(response => {
-        if (!response.ok) {PUT
+    
+      try {
+        const response = await fetch('/weather', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            cityName: cityName,
+            lat: lat,
+            lon: lon
+          })
+        });
+    
+        if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+    
         console.log('User document updated with current selected city');
-        currentSelCityFromInput = response.json();
-        
-
-      })
-      .catch(error => {
+        currentSelCityFromInput = await response.json();
+        // update the array of slides/cities
+        arrOfSlides.splice(arrOfSlides.length - 1, 0, currentSelCityFromInput);
+        //console.log(currentSelCityFromInput);
+      } catch (error) {
         console.error('There was a problem with the PUT request:', error);
-      });
+      }
     }
     
 
@@ -482,8 +483,7 @@ button.addEventListener('click', function(event) {
   bisearchSel.classList.add('bi-search');
   bisearchSel.classList.add('font-13');
 
-  // update the array of slides/cities
-  arrOfSlides.splice(arrOfSlides.length - 1, 0, currentSelCityFromInput);
+
   // run list of cities function
   listCities(currentSelCityFromInput);
   // insert the currentSelCityFromInput the current slide

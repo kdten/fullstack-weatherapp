@@ -201,9 +201,9 @@ module.exports = {
       }
     
       let cityWeather = {
-      lat: req.body.lat,
-      lon: req.body.lon,
-      cityName: req.body.cityName,
+      lat: lat,
+      lon: lon,
+      cityName: cityName,
       aqi: aqData.list[0].main.aqi,
       curTemp: Math.round(owData.current.temp),
       feelsTemp: Math.round(owData.current.feels_like),
