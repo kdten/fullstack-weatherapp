@@ -155,33 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-
-    // // PUT for current city, replaces 0 index in db
-    // function updateCurrentCity(city) {
-    //   fetch('/weather/current', {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //     cityName: city
-    //     })
-    //   })
-    //   .then(response => {
-    //     if (!response.ok) {
-    //       throw new Error('Network response was not ok');
-    //     }
-    //     console.log('User document updated with current selected city');
-    //     // Add any additional desired code logic here
-    //     // reload page here? nothing doe with response from front end
-    //   })
-    //   .catch(error => {
-    //     console.error('There was a problem with the PUT request:', error);
-    //   });
-    // }
-
-
-    // PUT for adding city to user document in db
+    // PUT for adding city to user document in db, and getting weather data for that city
     function updateUserCity(city) {
       const { lat, lon, cityName } = city;
 
@@ -196,13 +170,15 @@ document.addEventListener("DOMContentLoaded", () => {
           lon: lon
         })
       })
+      
       .then(response => {
         if (!response.ok) {PUT
           throw new Error('Network response was not ok');
         }
         console.log('User document updated with current selected city');
-        // Add any additional desired code logic here
-        // must reload page to show new city is added, carousel event could do that?
+        currentSelCityFromInput = response.json();
+        
+
       })
       .catch(error => {
         console.error('There was a problem with the PUT request:', error);
@@ -496,11 +472,10 @@ const button = document.querySelector('.city-submit-btn');
 // Event listener
 button.addEventListener('click', function(event) {
   event.preventDefault(); // prevent the default form submission behavior
-  // adds city to database
+  // adds city to database, returns weather data for that city
   updateUserCity(currentSelCityFromInput);
-  // Get the weather using using a native node fetch req using a POST method to the /weather route
   
-  // change icon from search(magnifying glass) to add(plus sign)
+  // change icon from add(plus sign) (back) to search(magnifying glass)
   const bisearchSel = document.querySelector('.bi-plus');
   bisearchSel.classList.remove('bi-plus');
   bisearchSel.classList.remove('font-18');
