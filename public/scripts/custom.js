@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const carouselItem = document.createElement("div");
               carouselItem.classList.add("carousel-item");
               carouselItem.innerHTML = `
-                <div class="card rounded-l shadow-l m-3" style="height:550px">
+                <div class="card rounded-l shadow-l m-3" style="height:400px">
                   <div class="card-center text-center">
                     <div class="content">
                     
@@ -520,7 +520,7 @@ button.addEventListener('click', function(event) {
     const carouselItem = document.createElement('div');
     carouselItem.classList.add('carousel-item');
     carouselItem.innerHTML = `
-    <div class="card rounded-l shadow-l m-4" style="height:550px">
+    <div class="card rounded-l shadow-l m-4" style="height:400px">
       <div class="card-center text-center">
         <div class="content">
           
@@ -651,7 +651,7 @@ button.addEventListener('click', function(event) {
       //           <!-- End of bootstrap carousel, start of DuoMobile card -->
       //           <div class="carousel-item active">
 
-      //             <div class="card rounded-l shadow-l m-4" style="height:550px">
+      //             <div class="card rounded-l shadow-l m-4" style="height:400px">
       //               <div class="card-center text-center">
       //                 <div class="content">
                         
@@ -666,7 +666,7 @@ button.addEventListener('click', function(event) {
       const carouselItemSel = document.querySelector(".carousel-item.active");
       if (slide.cityName) {
         carouselItemSel.innerHTML = `
-           <div class="card rounded-l shadow-l m-4" style="height:550px">
+           <div class="card rounded-l shadow-l m-4" style="height:400px">
                     <div class="card-center text-center">
                       <div class="content"></div>
               <div class="main-weather">

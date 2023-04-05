@@ -314,6 +314,10 @@ getWeatherForLoc: async (req, res) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+  // Get user location send from front end
+  
+
+
   // Get lat and lon, package user for databse, send, rcv citylist, get weather for each city list, package, send to front end
   // Save current lat, lon, userID from client req
   let lon = req.body.long;
