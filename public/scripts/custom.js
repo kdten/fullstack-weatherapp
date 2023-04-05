@@ -127,7 +127,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const cityToRemove = e.target.parentElement.innerText;
         // remove cityToRemove from arrOfSlides array
         arrOfSlides = arrOfSlides.filter((city) => city.cityName !== cityToRemove);
-
+        // remove the div element with the class "carousel-item" whose ...
+        // const carouselItems = document.querySelectorAll('.carousel-item');
+        // carouselItems.forEach((item) => {
+        //   if (item.innerText === cityToRemove) {
+        //     item.remove();
+        //   }
+        // });
+ 
+         
         // use a delete request to delete the city from the database
         fetch('/weather', {
           method: 'DELETE',
@@ -144,7 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           console.log('User document updated with current selected city');
           // Add any additional desired code logic here
-          // reload page here? nothing done with response from front end
         }
         )
         .catch(error => {
@@ -181,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // update the array of slides/cities
         arrOfSlides.splice(arrOfSlides.length - 1, 0, currentSelCityFromInput);
         //console.log(currentSelCityFromInput);
+        listCities();
       } catch (error) {
         console.error('There was a problem with the PUT request:', error);
       }
@@ -485,7 +493,7 @@ button.addEventListener('click', function(event) {
 
 
   // run list of cities function
-  listCities(currentSelCityFromInput);
+  listCities();
   // insert the currentSelCityFromInput the current slide
   insertCity(currentSelCityFromInput);
 
@@ -620,21 +628,6 @@ button.addEventListener('click', function(event) {
       if (activeSlideIndex === arrOfSlides.length - 1) {
         listCities(currentSelCityFromInput);
       }
-      
-      // Populate center display
-      // <div class="carousel-inner">
-      //           <!-- End of bootstrap carousel, start of DuoMobile card -->
-      //           <div class="carousel-item active">
-
-      //             <div class="card rounded-l shadow-l m-4" style="height:400px">
-      //               <div class="card-center text-center">
-      //                 <div class="content">
-                        
-      //                 </div>
-      //               </div>
-      //             </div>
-      //           </div>
-      //         </div>
 
       
 
