@@ -3,7 +3,8 @@ A full-stack PWA featuring the ability to save and auto-complete location search
 
 **Link to project:** https://scary-jacket-fish.cyclic.app/
 
-![preview](images/preview.gif)
+![](images/weatherpreview.gif)
+
 
 ## How It's Made:
 
