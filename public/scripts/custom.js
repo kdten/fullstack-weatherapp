@@ -492,6 +492,7 @@ button.addEventListener('click', function(event) {
   bisearchSel.classList.add('font-13');
 
 
+
   // run list of cities function
   listCities();
   // insert the currentSelCityFromInput the current slide
