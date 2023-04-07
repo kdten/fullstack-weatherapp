@@ -8,7 +8,7 @@ A full-stack PWA featuring the ability to save and auto-complete location search
 
 ## How It's Made:
 
-**Tech used:** 
+**Tech used** 
 
 Front end built with HTML, CSS, and JavaScript. 
 
@@ -27,6 +27,6 @@ Smaller optimizations I would like to make include:
 - Support beyond US cities
 - Deploy to AWS
 
-## Lessons Learned:
+## Lessons Learned
 
 I firstly learned that planning should be started long before the project is started. I learned that it is important to plan out the project in detail before starting to code. This top-down view will help you to avoid any major roadblocks and will help you to stay on track. I also learned that it is important to keep your code clean and organized. This will help you to avoid any confusion when you come back to the project later on.
